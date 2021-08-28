@@ -1,15 +1,11 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 import { MoviesContext } from '../MoviesContext';
 import { Button } from './Button';
 
 import '../styles/sidebar.scss';
 
-export function SideBar() {
+function SideBarComponent() {
   const { selectNewGenre, selectedGenreId, genres } = useContext(MoviesContext);
-
-  function handleClickButton(id: number) {
-    selectNewGenre(id);
-  }
 
   return (
     <nav className="sidebar">
@@ -23,7 +19,7 @@ export function SideBar() {
             key={String(genre.id)}
             title={genre.title}
             iconName={genre.name}
-            onClick={() => handleClickButton(genre.id)}
+            onClick={() => selectNewGenre(genre.id)}
             selected={selectedGenreId === genre.id}
           />
         ))}
@@ -31,3 +27,7 @@ export function SideBar() {
     </nav>
   );
 }
+
+export const SideBar = memo(SideBarComponent, (prevProps, nextProps) => {
+  return Object.is(prevProps, nextProps);
+});
